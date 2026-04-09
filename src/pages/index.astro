@@ -22,7 +22,7 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 		subtitle="A high-performance builder for premium homes and commercial spaces in Melbourne West. We combine quality, transparency, and disciplined delivery."
 		image="https://images.unsplash.com/photo-1460574283810-2aab119d8511?auto=format&fit=crop&w=2000&q=80"
 		primaryCtaLabel="DISCOVER MORE"
-		primaryCtaHref="/projects"
+		primaryCtaHref={`${import.meta.env.BASE_URL}projects`}
 		secondaryCtaLabel="BOOK SITE VISIT"
 		secondaryCtaHref="#lead-forms"
 	/>
@@ -40,8 +40,8 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 					active communication, and site-safe execution from start to finish.
 				</p>
 				<div class="cta-row">
-					<a class="btn-accent" href="/services">OUR WORK</a>
-					<a class="btn-ghost" href="/contact">GET QUOTE</a>
+					<a class="btn-accent" href={`${import.meta.env.BASE_URL}services`}>OUR WORK</a>
+					<a class="btn-ghost" href={`${import.meta.env.BASE_URL}contact`}>GET QUOTE</a>
 				</div>
 			</article>
 		</div>
@@ -71,7 +71,7 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 				{featuredProjects.map((project) => (
 					<ProjectCard
 						title={project.data.title}
-						href={`/projects/${project.data.slug}`}
+						href={`${import.meta.env.BASE_URL}projects/${project.data.slug}`}
 						summary={project.data.summary}
 						image={project.data.coverImage}
 						location={project.data.location}
@@ -79,7 +79,7 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 				))}
 			</div>
 			<div class="cta-row">
-				<a class="btn-accent" href="/projects">VIEW ALL PROJECTS</a>
+				<a class="btn-accent" href={`${import.meta.env.BASE_URL}projects`}>VIEW ALL PROJECTS</a>
 			</div>
 		</div>
 	</section>
@@ -178,7 +178,7 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 			<article class="card">
 				<h3>SERVICE AREA</h3>
 				<p>{site.serviceAreas.join(', ')}</p>
-				<a class="btn-accent" href="/contact">CONTACT TEAM</a>
+				<a class="btn-accent" href={`${import.meta.env.BASE_URL}contact`}>CONTACT TEAM</a>
 			</article>
 		</div>
 	</section>

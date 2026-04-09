@@ -43,8 +43,8 @@ const { Content } = await render(project);
     <div class="container">
       <Content />
       <div class="cta-row">
-        <a class="btn-accent" href="/contact">START YOUR PROJECT</a>
-        <a class="btn-ghost" href="/projects">BACK TO PROJECTS</a>
+        <a class="btn-accent" href={`${import.meta.env.BASE_URL}contact`}>START YOUR PROJECT</a>
+        <a class="btn-ghost" href={`${import.meta.env.BASE_URL}projects`}>BACK TO PROJECTS</a>
       </div>
     </div>
   </section>

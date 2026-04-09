@@ -18,7 +18,7 @@ const projects = (await getCollection('projects')).sort((a, b) => b.data.complet
         {projects.map((project) => (
           <ProjectCard
             title={project.data.title}
-            href={`/projects/${project.data.slug}`}
+            href={`${import.meta.env.BASE_URL}projects/${project.data.slug}`}
             summary={project.data.summary}
             image={project.data.coverImage}
             location={project.data.location}

@@ -25,12 +25,12 @@ export const site = {
 };
 
 export const navLinks = [
-  { href: '/', label: 'HOME' },
-  { href: '/services', label: 'SERVICES' },
-  { href: '/projects', label: 'PROJECTS' },
-  { href: '/about', label: 'ABOUT' },
-  { href: '/faq', label: 'FAQ' },
-  { href: '/contact', label: 'CONTACT' },
+  { href: import.meta.env.BASE_URL, label: 'HOME' },
+  { href: `${import.meta.env.BASE_URL}services`, label: 'SERVICES' },
+  { href: `${import.meta.env.BASE_URL}projects`, label: 'PROJECTS' },
+  { href: `${import.meta.env.BASE_URL}about`, label: 'ABOUT' },
+  { href: `${import.meta.env.BASE_URL}faq`, label: 'FAQ' },
+  { href: `${import.meta.env.BASE_URL}contact`, label: 'CONTACT' },
 ];
 
 export const awards = [

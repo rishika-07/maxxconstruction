@@ -18,7 +18,7 @@ import { navLinks, site } from '../data/site';
       </nav>
     </details>
 
-    <a class="brand-mark" href="/" aria-label="Maxx Construction Group homepage">
+    <a class="brand-mark" href={import.meta.env.BASE_URL} aria-label="Maxx Construction Group homepage">
       MAXX CONSTRUCTION GROUP
     </a>
 
@@ -29,10 +29,10 @@ import { navLinks, site } from '../data/site';
           <label class="sr-only" for="header-search-input">Search</label>
           <input id="header-search-input" type="search" placeholder="Search projects or services" />
           <button type="button">GO</button>
-          <a href="/search" aria-label="Open full search page">OPEN SEARCH PAGE</a>
+          <a href={`${import.meta.env.BASE_URL}search`} aria-label="Open full search page">OPEN SEARCH PAGE</a>
         </div>
       </details>
-      <a href="/projects" aria-label="Go to projects page">BOOKMARK</a>
+      <a href={`${import.meta.env.BASE_URL}projects`} aria-label="Go to projects page">BOOKMARK</a>
     </div>
   </div>
 
