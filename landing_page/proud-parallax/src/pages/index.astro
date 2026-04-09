@@ -1,0 +1,185 @@
+---
+import { getCollection } from 'astro:content';
+import Hero from '../components/Hero.astro';
+import LeadForms from '../components/LeadForms.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { awards, site, stats } from '../data/site';
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+	.filter((project) => project.data.featured)
+	.sort((a, b) => b.data.completionYear - a.data.completionYear)
+	.slice(0, 4);
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout>
+	<Hero
+		title="BUILDING DREAMS, CREATING LEGACIES"
+		subtitle="A high-performance builder for premium homes and commercial spaces in Melbourne West. We combine quality, transparency, and disciplined delivery."
+		image="https://images.unsplash.com/photo-1460574283810-2aab119d8511?auto=format&fit=crop&w=2000&q=80"
+		primaryCtaLabel="DISCOVER MORE"
+		primaryCtaHref="/projects"
+		secondaryCtaLabel="BOOK SITE VISIT"
+		secondaryCtaHref="#lead-forms"
+	/>
+
+	<section class="section">
+		<div class="container grid-2">
+			<article>
+				<p class="kicker">WE BUILD WITH INTEGRITY</p>
+				<h2 class="section-title">EVERY HOUSE IS SPECIAL</h2>
+			</article>
+			<article>
+				<p class="section-intro">
+					At Maxx Construction Group, every project is treated as a long-term legacy.
+					Our team delivers residential and commercial outcomes with strict quality,
+					active communication, and site-safe execution from start to finish.
+				</p>
+				<div class="cta-row">
+					<a class="btn-accent" href="/services">OUR WORK</a>
+					<a class="btn-ghost" href="/contact">GET QUOTE</a>
+				</div>
+			</article>
+		</div>
+	</section>
+
+	<section class="section section-surface">
+		<div class="container">
+			<p class="kicker">WHAT WE DO</p>
+			<h2 class="section-title">CONSTRUCTION EXPERTISE</h2>
+			<div class="grid-4">
+				{services.map((service) => (
+					<article class="card">
+						<p class="label">{service.data.icon}</p>
+						<h3>{service.data.title}</h3>
+						<p>{service.data.excerpt}</p>
+					</article>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container">
+			<p class="kicker">RECENT PROJECT</p>
+			<h2 class="section-title">FEATURED BUILDS</h2>
+			<div class="grid-2">
+				{featuredProjects.map((project) => (
+					<ProjectCard
+						title={project.data.title}
+						href={`/projects/${project.data.slug}`}
+						summary={project.data.summary}
+						image={project.data.coverImage}
+						location={project.data.location}
+					/>
+				))}
+			</div>
+			<div class="cta-row">
+				<a class="btn-accent" href="/projects">VIEW ALL PROJECTS</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="section section-surface">
+		<div class="container">
+			<p class="kicker">WHY CHOOSE US</p>
+			<h2 class="section-title">DISCIPLINE, CLARITY, DELIVERY</h2>
+			<div class="grid-4">
+				{stats.map((stat) => (
+					<article class="card">
+						<h3>{stat.value}</h3>
+						<p>{stat.label}</p>
+					</article>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container">
+			<p class="kicker">TESTIMONIAL</p>
+			<h2 class="section-title">CLIENT FEEDBACK</h2>
+			<div class="grid-3">
+				{testimonials.map((testimonial) => (
+					<article class="card">
+						<p class="label">{testimonial.data.project}</p>
+						<h3>{'★'.repeat(testimonial.data.rating)}</h3>
+						<p>"{testimonial.data.quote}"</p>
+						<p class="muted">{testimonial.data.name} | {testimonial.data.role}</p>
+					</article>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<section class="section section-surface">
+		<div class="container grid-3">
+			<article class="card">
+				<p class="kicker">CORE FEATURED</p>
+				<h3>EXPERIENCE</h3>
+				<p>With deep construction expertise, we proactively manage complexity and risk.</p>
+			</article>
+			<article class="card">
+				<p class="kicker">CORE FEATURED</p>
+				<h3>SKILLED TEAM</h3>
+				<p>Our delivery team is committed to high-standard workmanship at every phase.</p>
+			</article>
+			<article class="card">
+				<p class="kicker">CORE FEATURED</p>
+				<h3>SAFETY FIRST</h3>
+				<p>We maintain strict compliance and safety procedures across every active site.</p>
+			</article>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container grid-2">
+			<article>
+				<p class="kicker">OUR AWARDS</p>
+				<h2 class="section-title">VISION, MISSION, VALUES</h2>
+				<p class="section-intro">
+					To be a leading construction company known for innovation, sustainability,
+					and excellence, delivering projects that improve communities.
+				</p>
+				<ul>
+					{awards.map((award) => (
+						<li class="muted">{award}</li>
+					))}
+				</ul>
+			</article>
+			<article class="card">
+				<h3>MISSION STATEMENT</h3>
+				<p>
+					Build strong, sustainable, and innovative structures while exceeding client
+					expectations on quality, budget, and delivery certainty.
+				</p>
+				<h3>CORE VALUES</h3>
+				<p>QUALITY & EXCELLENCE | INTEGRITY & TRANSPARENCY | SAFETY FIRST</p>
+			</article>
+		</div>
+	</section>
+
+	<LeadForms />
+
+	<section class="section">
+		<div class="container grid-2">
+			<article>
+				<p class="kicker">CONTACT US</p>
+				<h2 class="section-title">READY TO START?</h2>
+				<p class="section-intro">
+					Contact support: <a href={site.tel}>{site.phone}</a> | email support:
+					<a href={`mailto:${site.email}`}> {site.email}</a>
+				</p>
+			</article>
+			<article class="card">
+				<h3>SERVICE AREA</h3>
+				<p>{site.serviceAreas.join(', ')}</p>
+				<a class="btn-accent" href="/contact">CONTACT TEAM</a>
+			</article>
+		</div>
+	</section>
+</BaseLayout>

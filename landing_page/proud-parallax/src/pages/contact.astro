@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="Contact | Maxx Construction Group" description="Contact Maxx Construction Group for quotes, site visits, and call-back requests.">
+  <section class="section">
+    <div class="container">
+      <p class="kicker">CONTACT US</p>
+      <h1 class="section-title">LET'S BUILD SOMETHING EXCEPTIONAL</h1>
+      <p class="section-intro">
+        Call, email, or submit your project brief. We respond quickly with practical next steps.
+      </p>
+      <div class="grid-2">
+        <article class="card">
+          <p class="label">CONTACT SUPPORT</p>
+          <h2><a href={site.tel}>{site.phone}</a></h2>
+          <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+          <p>{site.address}</p>
+        </article>
+
+        <form class="lead-form" method="post" action="#" aria-label="General contact form">
+          <h3>GENERAL ENQUIRY</h3>
+          <label>
+            FULL NAME
+            <input name="name" autocomplete="name" required />
+          </label>
+          <label>
+            EMAIL
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            PHONE
+            <input name="phone" type="tel" autocomplete="tel" />
+          </label>
+          <label>
+            PROJECT DETAILS
+            <textarea name="message" rows="5" required></textarea>
+          </label>
+          <button type="submit" class="btn-accent">SEND ENQUIRY</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

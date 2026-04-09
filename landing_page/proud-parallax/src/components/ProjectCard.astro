@@ -1,0 +1,25 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  href: string;
+  summary: string;
+  image: string;
+  location: string;
+}
+
+const { title, href, summary, image, location } = Astro.props;
+---
+
+<article class="project-card">
+  <a href={href} class="project-card-link" aria-label={`View project ${title}`}>
+    <Image src={image} alt={title} width={900} height={600} loading="lazy" />
+    <div class="project-card-body">
+      <p class="label">{location}</p>
+      <h3>{title}</h3>
+      <p>{summary}</p>
+      <span class="text-link">VIEW PROJECT</span>
+    </div>
+  </a>
+</article>

@@ -1,0 +1,35 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  image: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+}
+
+const {
+  title,
+  subtitle,
+  image,
+  primaryCtaLabel,
+  primaryCtaHref,
+  secondaryCtaLabel,
+  secondaryCtaHref,
+} = Astro.props;
+---
+
+<section class="hero" style={`--hero-image: url('${image}')`}>
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <p class="kicker">MAXX CONSTRUCTION GROUP</p>
+    <h1>{title}</h1>
+    <p class="hero-subtitle">{subtitle}</p>
+    <div class="cta-row">
+      <a class="btn-accent" href={primaryCtaHref}>{primaryCtaLabel}</a>
+      <a class="btn-ghost" href={secondaryCtaHref}>{secondaryCtaLabel}</a>
+    </div>
+  </div>
+  <div class="hero-progress" aria-hidden="true"></div>
+</section>

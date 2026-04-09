@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => b.data.completionYear - a.data.completionYear);
+---
+
+<BaseLayout title="Projects | Maxx Construction Group" description="Explore recent construction projects by Maxx Construction Group.">
+  <section class="section">
+    <div class="container">
+      <p class="kicker">RECENT PROJECTS</p>
+      <h1 class="section-title">PROJECT PORTFOLIO</h1>
+      <p class="section-intro">
+        Explore recently completed work across residential and multi-dwelling categories.
+      </p>
+      <div class="grid-2">
+        {projects.map((project) => (
+          <ProjectCard
+            title={project.data.title}
+            href={`/projects/${project.data.slug}`}
+            summary={project.data.summary}
+            image={project.data.coverImage}
+            location={project.data.location}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

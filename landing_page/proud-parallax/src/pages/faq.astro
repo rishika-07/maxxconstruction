@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faqs = (await getCollection('faqs')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="FAQ | Maxx Construction Group" description="Common questions about timelines, warranty, and service areas.">
+  <section class="section">
+    <div class="container">
+      <p class="kicker">FAQ</p>
+      <h1 class="section-title">FREQUENTLY ASKED QUESTIONS</h1>
+      <p class="section-intro">
+        Answers to common pre-construction and delivery questions.
+      </p>
+      <div class="accordion">
+        {faqs.map((faq) => (
+          <details>
+            <summary>{faq.data.question}</summary>
+            <p>{faq.data.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

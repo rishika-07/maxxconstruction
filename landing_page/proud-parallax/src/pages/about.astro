@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site, stats } from '../data/site';
+---
+
+<BaseLayout title="About | Maxx Construction Group" description="Meet the Maxx Construction team and our construction philosophy.">
+  <section class="section">
+    <div class="container">
+      <p class="kicker">ABOUT US</p>
+      <h1 class="section-title">WE BUILD WITH INTEGRITY</h1>
+      <p class="section-intro">
+        Maxx Construction Group is a Truganina-based construction team delivering
+        residential and commercial outcomes with disciplined planning, safety-first
+        execution, and transparent communication.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-surface">
+    <div class="container grid-3">
+      <article class="card">
+        <p class="label">VISION</p>
+        <h3>LEADING THROUGH QUALITY</h3>
+        <p>
+          To be a leading construction company known for innovation, sustainability,
+          and excellence that enhances communities across Victoria.
+        </p>
+      </article>
+      <article class="card">
+        <p class="label">MISSION</p>
+        <h3>DELIVER LASTING VALUE</h3>
+        <p>
+          Deliver projects on time and on budget while maintaining exceptional
+          quality, site safety, and client confidence from start to finish.
+        </p>
+      </article>
+      <article class="card">
+        <p class="label">CORE VALUES</p>
+        <h3>QUALITY. TRANSPARENCY. SAFETY.</h3>
+        <p>
+          We execute every phase with integrity, clear communication, and strict
+          standards that protect people, timelines, and outcomes.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="kicker">PERFORMANCE</p>
+      <h2 class="section-title">PROJECT DELIVERY METRICS</h2>
+      <div class="grid-4">
+        {stats.map((stat) => (
+          <article class="card">
+            <h3>{stat.value}</h3>
+            <p>{stat.label}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-surface">
+    <div class="container">
+      <p class="kicker">SERVICE AREA</p>
+      <h2 class="section-title">MELBOURNE WEST AND BEYOND</h2>
+      <p class="section-intro">
+        We actively support clients across {site.serviceAreas.join(', ')} with tailored
+        build planning and practical delivery programs.
+      </p>
+      <a class="btn-accent" href="/contact">BOOK A PROJECT CONSULT</a>
+    </div>
+  </section>
+</BaseLayout>
