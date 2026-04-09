@@ -28,12 +28,12 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 	/>
 
 	<section class="section">
-		<div class="container grid-2">
-			<article>
+		<div class="container grid-2" data-stagger>
+			<article data-reveal="left">
 				<p class="kicker">WE BUILD WITH INTEGRITY</p>
 				<h2 class="section-title">EVERY HOUSE IS SPECIAL</h2>
 			</article>
-			<article>
+			<article data-reveal="right">
 				<p class="section-intro">
 					At Maxx Construction Group, every project is treated as a long-term legacy.
 					Our team delivers residential and commercial outcomes with strict quality,
@@ -49,9 +49,9 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 
 	<section class="section section-surface">
 		<div class="container">
-			<p class="kicker">WHAT WE DO</p>
-			<h2 class="section-title">CONSTRUCTION EXPERTISE</h2>
-			<div class="grid-4">
+			<p class="kicker" data-reveal>WHAT WE DO</p>
+			<h2 class="section-title" data-reveal>CONSTRUCTION EXPERTISE</h2>
+			<div class="grid-4" data-stagger>
 				{services.map((service) => (
 					<article class="card">
 						<p class="label">{service.data.icon}</p>
@@ -65,9 +65,9 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 
 	<section class="section">
 		<div class="container">
-			<p class="kicker">RECENT PROJECT</p>
-			<h2 class="section-title">FEATURED BUILDS</h2>
-			<div class="grid-2">
+			<p class="kicker" data-reveal>RECENT PROJECT</p>
+			<h2 class="section-title" data-reveal>FEATURED BUILDS</h2>
+			<div class="grid-2" data-stagger>
 				{featuredProjects.map((project) => (
 					<ProjectCard
 						title={project.data.title}
@@ -79,16 +79,16 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 				))}
 			</div>
 			<div class="cta-row">
-				<a class="btn-accent" href={`${import.meta.env.BASE_URL}projects`}>VIEW ALL PROJECTS</a>
+				<a class="btn-accent" href={`${import.meta.env.BASE_URL}projects`} data-reveal>VIEW ALL PROJECTS</a>
 			</div>
 		</div>
 	</section>
 
 	<section class="section section-surface">
 		<div class="container">
-			<p class="kicker">WHY CHOOSE US</p>
-			<h2 class="section-title">DISCIPLINE, CLARITY, DELIVERY</h2>
-			<div class="grid-4">
+			<p class="kicker" data-reveal>WHY CHOOSE US</p>
+			<h2 class="section-title" data-reveal>DISCIPLINE, CLARITY, DELIVERY</h2>
+			<div class="grid-4" data-stagger>
 				{stats.map((stat) => (
 					<article class="card">
 						<h3>{stat.value}</h3>
@@ -101,9 +101,9 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 
 	<section class="section">
 		<div class="container">
-			<p class="kicker">TESTIMONIAL</p>
-			<h2 class="section-title">CLIENT FEEDBACK</h2>
-			<div class="grid-3">
+			<p class="kicker" data-reveal>TESTIMONIAL</p>
+			<h2 class="section-title" data-reveal>CLIENT FEEDBACK</h2>
+			<div class="grid-3" data-stagger>
 				{testimonials.map((testimonial) => (
 					<article class="card">
 						<p class="label">{testimonial.data.project}</p>
@@ -117,7 +117,7 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 	</section>
 
 	<section class="section section-surface">
-		<div class="container grid-3">
+		<div class="container grid-3" data-stagger>
 			<article class="card">
 				<p class="kicker">CORE FEATURED</p>
 				<h3>EXPERIENCE</h3>
@@ -137,8 +137,8 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 	</section>
 
 	<section class="section">
-		<div class="container grid-2">
-			<article>
+		<div class="container grid-2" data-stagger>
+			<article data-reveal="left">
 				<p class="kicker">OUR AWARDS</p>
 				<h2 class="section-title">VISION, MISSION, VALUES</h2>
 				<p class="section-intro">
@@ -151,7 +151,7 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 					))}
 				</ul>
 			</article>
-			<article class="card">
+			<article class="card" data-reveal="right">
 				<h3>MISSION STATEMENT</h3>
 				<p>
 					Build strong, sustainable, and innovative structures while exceeding client
@@ -166,8 +166,8 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 	<LeadForms />
 
 	<section class="section">
-		<div class="container grid-2">
-			<article>
+		<div class="container grid-2" data-stagger>
+			<article data-reveal="left">
 				<p class="kicker">CONTACT US</p>
 				<h2 class="section-title">READY TO START?</h2>
 				<p class="section-intro">
@@ -175,7 +175,7 @@ const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data
 					<a href={`mailto:${site.email}`}> {site.email}</a>
 				</p>
 			</article>
-			<article class="card">
+			<article class="card" data-reveal="right">
 				<h3>SERVICE AREA</h3>
 				<p>{site.serviceAreas.join(', ')}</p>
 				<a class="btn-accent" href={`${import.meta.env.BASE_URL}contact`}>CONTACT TEAM</a>
