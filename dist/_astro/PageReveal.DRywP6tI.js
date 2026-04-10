@@ -1,0 +1,1 @@
+import{u as t,j as a,m as i}from"./use-reduced-motion.DxSQdTww.js";function n({children:e}){return t()?a.jsx("div",{className:"page-reveal-shell",children:e}):a.jsx(i.div,{className:"page-reveal-shell",initial:{opacity:0,y:16},animate:{opacity:1,y:0},transition:{duration:.65,ease:[.22,1,.36,1]},children:e})}export{n as default};

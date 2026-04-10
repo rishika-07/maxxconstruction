@@ -1,6 +1,8 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PageReveal from '../components/motion/PageReveal';
+import { ClientRouter } from 'astro:transitions';
 import { site } from '../data/site';
 import '../styles/global.css';
 
@@ -34,6 +36,7 @@ const schemaOrg = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <meta property="og:type" content="website" />
@@ -42,17 +45,132 @@ const schemaOrg = {
     <meta property="og:image" content="https://maxxconstructiongroup.com.au/wp-content/uploads/2025/03/WhatsApp-Image-2025-03-04-at-13.27.21.jpeg.bv_resized_desktop.jpeg.bv_.webp" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <script is:inline>
+      (() => {
+        const themeKey = 'maxx-theme-preference';
+        try {
+          const savedTheme = window.localStorage.getItem(themeKey);
+          if (savedTheme === 'light' || savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.documentElement.style.colorScheme = savedTheme;
+          }
+        } catch {
+          // Ignore localStorage access issues and keep system preference.
+        }
+      })();
+    </script>
     <title>{title}</title>
+    <ClientRouter />
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)}></script>
   </head>
   <body>
     <Header />
     <main>
-      <slot />
+      <PageReveal client:load>
+        <slot />
+      </PageReveal>
     </main>
     <Footer />
-    <script is:inline>
-      (() => {
+    <script>
+      import gsap from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const themeStorageKey = 'maxx-theme-preference';
+      const themeOrder = ['system', 'light', 'dark'];
+
+      const getStoredTheme = () => {
+        try {
+          const storedTheme = window.localStorage.getItem(themeStorageKey);
+          return storedTheme === 'system' || storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : null;
+        } catch {
+          return null;
+        }
+      };
+
+      const syncHeaderSurface = () => {
+        const header = document.querySelector('.site-header');
+        if (!(header instanceof HTMLElement)) return;
+
+        const headerSoft = getComputedStyle(document.documentElement)
+          .getPropertyValue('--header-bg-soft')
+          .trim();
+
+        gsap.set(header, {
+          backgroundColor: headerSoft,
+        });
+      };
+
+      const applyTheme = (theme) => {
+        document.documentElement.dataset.themePreference = theme;
+
+        if (theme === 'system') {
+          document.documentElement.removeAttribute('data-theme');
+          document.documentElement.style.colorScheme = 'light dark';
+          syncHeaderSurface();
+          return;
+        }
+
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.style.colorScheme = theme;
+        syncHeaderSurface();
+      };
+
+      const syncThemeToggleState = (theme) => {
+        document.querySelectorAll('[data-theme-toggle]').forEach((node) => {
+          if (!(node instanceof HTMLButtonElement)) return;
+          node.dataset.themeCurrent = theme;
+          node.setAttribute('aria-label', `Switch theme. Current: ${theme}.`);
+          node.setAttribute('title', `Theme: ${theme}`);
+        });
+      };
+
+      const getActiveTheme = () => document.documentElement.dataset.themePreference || 'system';
+
+      const setupThemeToggle = () => {
+        const initialTheme = getStoredTheme() ?? 'system';
+        applyTheme(initialTheme);
+        syncThemeToggleState(initialTheme);
+
+        if (document.body.dataset.themeMediaBound !== 'true') {
+          document.body.dataset.themeMediaBound = 'true';
+          const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+          mediaQuery.addEventListener('change', () => {
+            if (getActiveTheme() !== 'system') return;
+            applyTheme('system');
+            syncThemeToggleState('system');
+          });
+        }
+
+        document.querySelectorAll('[data-theme-toggle]').forEach((node) => {
+          if (!(node instanceof HTMLButtonElement)) return;
+          if (node.dataset.themeBound === 'true') return;
+          node.dataset.themeBound = 'true';
+
+          node.addEventListener('click', () => {
+            const currentTheme = getActiveTheme();
+            const currentIndex = themeOrder.indexOf(currentTheme);
+            const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
+
+            applyTheme(nextTheme);
+            syncThemeToggleState(nextTheme);
+
+            try {
+              window.localStorage.setItem(themeStorageKey, nextTheme);
+            } catch {
+              // Ignore storage errors; session still reflects selected theme.
+            }
+          });
+        });
+      };
+
+      const setupSiteAnimations = () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
+        setupThemeToggle();
+
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const staggerContainers = Array.from(document.querySelectorAll('[data-stagger]'));
 
@@ -71,9 +189,127 @@ const schemaOrg = {
         }
 
         const revealElements = Array.from(document.querySelectorAll('[data-reveal]'));
+        const gsapRevealElements = Array.from(document.querySelectorAll('[data-gsap-reveal]'));
+
+        const forms = Array.from(document.querySelectorAll('.lead-form'));
+        forms.forEach((form) => {
+          if (!(form instanceof HTMLFormElement)) return;
+          if (form.dataset.motionBound === 'true') return;
+          form.dataset.motionBound = 'true';
+
+          const button = form.querySelector('button[type="submit"]');
+          const feedback = form.querySelector('.form-feedback');
+          const defaultLabel = button instanceof HTMLButtonElement ? button.textContent : '';
+
+          const submitHandler = (event) => {
+            event.preventDefault();
+            form.classList.remove('is-submitted');
+
+            if (button instanceof HTMLButtonElement) {
+              button.textContent = 'SENDING...';
+              button.disabled = true;
+            }
+
+            window.setTimeout(() => {
+              form.classList.add('is-submitted');
+              if (feedback instanceof HTMLElement) {
+                feedback.textContent = 'Request sent. Our team will contact you shortly.';
+              }
+
+              if (button instanceof HTMLButtonElement) {
+                button.textContent = 'REQUEST RECEIVED';
+                button.disabled = false;
+              }
+
+              if (!prefersReducedMotion) {
+                gsap.fromTo(
+                  form,
+                  { boxShadow: '0 0 0 rgba(245, 201, 120, 0)' },
+                  {
+                    boxShadow: '0 20px 36px rgba(95, 183, 255, 0.28)',
+                    duration: 0.45,
+                    ease: 'power2.out',
+                    yoyo: true,
+                    repeat: 1,
+                  }
+                );
+              }
+
+              window.setTimeout(() => {
+                if (button instanceof HTMLButtonElement) {
+                  button.textContent = defaultLabel;
+                }
+              }, 2400);
+            }, 560);
+          };
+
+          form.addEventListener('submit', submitHandler);
+        });
+
+        const menuDrawers = Array.from(document.querySelectorAll('.menu-drawer, .search-drawer'));
+        menuDrawers.forEach((drawer) => {
+          if (!(drawer instanceof HTMLDetailsElement)) return;
+          if (drawer.dataset.motionBound === 'true') return;
+          drawer.dataset.motionBound = 'true';
+
+          const panel = drawer.querySelector('.drawer-panel, .search-drawer-panel');
+          if (!(panel instanceof HTMLElement)) return;
+
+          drawer.addEventListener('toggle', () => {
+            if (prefersReducedMotion) return;
+            if (drawer.open) {
+              gsap.fromTo(
+                panel,
+                { autoAlpha: 0, y: 12 },
+                { autoAlpha: 1, y: 0, duration: 0.34, ease: 'power3.out' }
+              );
+            }
+          });
+        });
+
+        const closeDrawer = (drawer) => {
+          if (!(drawer instanceof HTMLDetailsElement)) return;
+          if (!drawer.open) return;
+          drawer.open = false;
+        };
+
+        const getLiveDrawers = () =>
+          Array.from(document.querySelectorAll('.menu-drawer, .search-drawer')).filter(
+            (drawer) => drawer instanceof HTMLDetailsElement
+          );
+
+        const closeAllDrawers = () => {
+          getLiveDrawers().forEach((drawer) => closeDrawer(drawer));
+        };
+
+        if (document.body.dataset.drawerBindings !== 'true') {
+          document.body.dataset.drawerBindings = 'true';
+
+          document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') return;
+            closeAllDrawers();
+          });
+
+          document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!(target instanceof Element)) return;
+
+            const closeButton = target.closest('[data-close-drawer="search"]');
+            if (closeButton) {
+              closeAllDrawers();
+              return;
+            }
+
+            const insideDrawer = target.closest('.menu-drawer, .search-drawer');
+            if (!insideDrawer) {
+              closeAllDrawers();
+            }
+          });
+        }
 
         if (prefersReducedMotion || !('IntersectionObserver' in window)) {
           revealElements.forEach((element) => element.classList.add('is-visible'));
+          gsapRevealElements.forEach((element) => element.classList.add('is-visible'));
           return;
         }
 
@@ -92,7 +328,209 @@ const schemaOrg = {
         );
 
         revealElements.forEach((element) => revealObserver.observe(element));
-      })();
+
+        const gsapRevealObserver = new IntersectionObserver(
+          (entries, observer) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              gsap.fromTo(
+                entry.target,
+                { autoAlpha: 0, y: 36 },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: 1.05,
+                  ease: 'power4.out',
+                }
+              );
+              observer.unobserve(entry.target);
+            }
+          },
+          {
+            threshold: 0.15,
+            rootMargin: '0px 0px -10% 0px',
+          }
+        );
+
+        gsapRevealElements.forEach((element) => gsapRevealObserver.observe(element));
+
+        const storySections = Array.from(document.querySelectorAll('.section'));
+        storySections.forEach((section) => {
+          if (!(section instanceof HTMLElement)) return;
+          const intensity = section.classList.contains('section-surface') ? 26 : 16;
+
+          gsap.fromTo(
+            section,
+            { backgroundPositionY: '0px' },
+            {
+              backgroundPositionY: `${intensity}px`,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true,
+              },
+            }
+          );
+        });
+
+        const accordionItems = Array.from(document.querySelectorAll('.accordion details'));
+        accordionItems.forEach((item) => {
+          if (!(item instanceof HTMLDetailsElement)) return;
+          if (item.dataset.motionBound === 'true') return;
+          item.dataset.motionBound = 'true';
+
+          item.addEventListener('toggle', () => {
+            if (prefersReducedMotion) return;
+            if (!item.open) return;
+
+            const summary = item.querySelector('summary');
+            const content = item.querySelector('p');
+
+            if (summary instanceof HTMLElement) {
+              gsap.fromTo(
+                summary,
+                { color: 'var(--text-primary)' },
+                {
+                  color: 'var(--color-gold)',
+                  duration: 0.22,
+                  ease: 'power2.out',
+                }
+              );
+            }
+
+            if (content instanceof HTMLElement) {
+              gsap.fromTo(
+                content,
+                { autoAlpha: 0, y: 12 },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: 0.34,
+                  ease: 'power3.out',
+                }
+              );
+            }
+          });
+        });
+
+        const header = document.querySelector('.site-header');
+        if (header instanceof HTMLElement) {
+          ScrollTrigger.create({
+            start: 0,
+            end: 'max',
+            onUpdate: (self) => {
+              const rootStyle = getComputedStyle(document.documentElement);
+              const headerStrong = rootStyle.getPropertyValue('--header-bg-strong').trim();
+              const headerSoft = rootStyle.getPropertyValue('--header-bg-soft').trim();
+              const isCondensed = self.scroll() > 12;
+
+              gsap.to(header, {
+                y: isCondensed ? -8 : 0,
+                backgroundColor: isCondensed ? headerStrong : headerSoft,
+                duration: 0.32,
+                ease: 'power2.out',
+              });
+            },
+          });
+        }
+
+        const heroOverlay = document.querySelector('[data-gsap-hero-overlay]');
+        if (heroOverlay instanceof HTMLElement) {
+          window.addEventListener(
+            'scroll',
+            () => {
+              const depth = Math.min(window.scrollY / 720, 1);
+              gsap.to(heroOverlay, {
+                opacity: 0.86 - depth * 0.14,
+                duration: 0.35,
+                overwrite: 'auto',
+              });
+            },
+            { passive: true }
+          );
+        }
+
+        const progressCore = document.querySelector('[data-gsap-progress-core]');
+        if (progressCore instanceof HTMLElement) {
+          gsap.fromTo(
+            progressCore,
+            { scaleX: 0, transformOrigin: 'left center' },
+            {
+              scaleX: 1,
+              duration: 3.4,
+              repeat: -1,
+              ease: 'power2.inOut',
+              yoyo: true,
+            }
+          );
+        }
+
+        const cards = Array.from(document.querySelectorAll('[data-gsap-card]'));
+        cards.forEach((card) => {
+          if (!(card instanceof HTMLElement)) return;
+          const image = card.querySelector('img');
+          const linkLine = card.querySelector('[data-link-line]');
+
+          card.addEventListener('mouseenter', () => {
+            gsap.to(card, {
+              y: -10,
+              boxShadow: '0 28px 36px rgba(8, 13, 23, 0.55)',
+              borderColor: 'rgba(245, 201, 120, 0.48)',
+              duration: 0.45,
+              ease: 'power3.out',
+            });
+            if (image instanceof HTMLElement) {
+              gsap.to(image, {
+                scale: 1.08,
+                filter: 'saturate(1.16) contrast(1.08)',
+                duration: 0.8,
+                ease: 'power3.out',
+              });
+            }
+            if (linkLine instanceof HTMLElement) {
+              gsap.to(linkLine, {
+                x: 6,
+                duration: 0.45,
+                ease: 'power2.out',
+              });
+            }
+          });
+
+          card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+              y: 0,
+              boxShadow: '0 18px 28px rgba(0, 0, 0, 0.26)',
+              borderColor: 'rgba(255, 255, 255, 0.12)',
+              duration: 0.5,
+              ease: 'power2.out',
+            });
+            if (image instanceof HTMLElement) {
+              gsap.to(image, {
+                scale: 1,
+                filter: 'saturate(1)',
+                duration: 0.65,
+                ease: 'power2.out',
+              });
+            }
+            if (linkLine instanceof HTMLElement) {
+              gsap.to(linkLine, {
+                x: 0,
+                duration: 0.4,
+                ease: 'power2.out',
+              });
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-gsap-reveal]').forEach((node) => {
+          node.classList.add('is-visible');
+        });
+      };
+
+      setupSiteAnimations();
+      document.addEventListener('astro:page-load', setupSiteAnimations);
     </script>
   </body>
 </html>

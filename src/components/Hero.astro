@@ -1,4 +1,6 @@
 ---
+import HeroMotion from './motion/HeroMotion';
+
 interface Props {
   title: string;
   subtitle: string;
@@ -20,16 +22,13 @@ const {
 } = Astro.props;
 ---
 
-<section class="hero" style={`--hero-image: url('${image}')`}>
-  <div class="hero-overlay"></div>
-  <div class="container hero-content">
-    <p class="kicker">MAXX CONSTRUCTION GROUP</p>
-    <h1>{title}</h1>
-    <p class="hero-subtitle">{subtitle}</p>
-    <div class="cta-row">
-      <a class="btn-accent" href={primaryCtaHref}>{primaryCtaLabel}</a>
-      <a class="btn-ghost" href={secondaryCtaHref}>{secondaryCtaLabel}</a>
-    </div>
-  </div>
-  <div class="hero-progress" aria-hidden="true"></div>
-</section>
+<HeroMotion
+  client:load
+  title={title}
+  subtitle={subtitle}
+  image={image}
+  primaryCtaLabel={primaryCtaLabel}
+  primaryCtaHref={primaryCtaHref}
+  secondaryCtaLabel={secondaryCtaLabel}
+  secondaryCtaHref={secondaryCtaHref}
+/>

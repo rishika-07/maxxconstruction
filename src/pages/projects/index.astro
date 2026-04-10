@@ -7,14 +7,14 @@ const projects = (await getCollection('projects')).sort((a, b) => b.data.complet
 ---
 
 <BaseLayout title="Projects | Maxx Construction Group" description="Explore recent construction projects by Maxx Construction Group.">
-  <section class="section">
+  <section class="section" data-gsap-reveal>
     <div class="container">
       <p class="kicker">RECENT PROJECTS</p>
       <h1 class="section-title">PROJECT PORTFOLIO</h1>
       <p class="section-intro">
         Explore recently completed work across residential and multi-dwelling categories.
       </p>
-      <div class="grid-2">
+      <div class="grid-2" data-stagger>
         {projects.map((project) => (
           <ProjectCard
             title={project.data.title}

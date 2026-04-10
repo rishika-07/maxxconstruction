@@ -6,7 +6,7 @@ const services = (await getCollection('services')).sort((a, b) => a.data.order -
 ---
 
 <BaseLayout title="Services | Maxx Construction Group" description="New builds, renovations, duplex and townhouse projects, and commercial fitouts.">
-  <section class="section">
+  <section class="section" data-gsap-reveal>
     <div class="container">
       <p class="kicker">WHAT WE DO</p>
       <h1 class="section-title">CONSTRUCTION SERVICES</h1>
@@ -17,10 +17,10 @@ const services = (await getCollection('services')).sort((a, b) => a.data.order -
     </div>
   </section>
 
-  <section class="section section-surface">
-    <div class="container grid-2">
+  <section class="section section-surface" data-gsap-reveal>
+    <div class="container grid-2" data-stagger>
       {services.map((service) => (
-        <article class="card">
+        <article class="card" data-reveal>
           <p class="label">{service.data.icon}</p>
           <h2>{service.data.title}</h2>
           <p>{service.data.excerpt}</p>
@@ -30,15 +30,15 @@ const services = (await getCollection('services')).sort((a, b) => a.data.order -
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" data-gsap-reveal>
     <div class="container">
       <p class="kicker">PROJECT FLOW</p>
       <h2 class="section-title">OUR BUILD PROCESS</h2>
-      <div class="grid-4">
-        <article class="card"><h3>01 DISCOVERY</h3><p>Site review, scope alignment, and budget framing.</p></article>
-        <article class="card"><h3>02 PRE-CONSTRUCTION</h3><p>Program definition, procurement planning, and permits coordination.</p></article>
-        <article class="card"><h3>03 CONSTRUCTION</h3><p>Disciplined execution with quality and safety checkpoints.</p></article>
-        <article class="card"><h3>04 HANDOVER</h3><p>Final inspections, defect closeout, and documentation pack.</p></article>
+      <div class="grid-4" data-stagger>
+        <article class="card" data-reveal><h3>01 DISCOVERY</h3><p>Site review, scope alignment, and budget framing.</p></article>
+        <article class="card" data-reveal><h3>02 PRE-CONSTRUCTION</h3><p>Program definition, procurement planning, and permits coordination.</p></article>
+        <article class="card" data-reveal><h3>03 CONSTRUCTION</h3><p>Disciplined execution with quality and safety checkpoints.</p></article>
+        <article class="card" data-reveal><h3>04 HANDOVER</h3><p>Final inspections, defect closeout, and documentation pack.</p></article>
       </div>
     </div>
   </section>

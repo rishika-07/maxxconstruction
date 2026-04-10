@@ -4,7 +4,7 @@ import { site, stats } from '../data/site';
 ---
 
 <BaseLayout title="About | Maxx Construction Group" description="Meet the Maxx Construction team and our construction philosophy.">
-  <section class="section">
+  <section class="section" data-gsap-reveal>
     <div class="container">
       <p class="kicker">ABOUT US</p>
       <h1 class="section-title">WE BUILD WITH INTEGRITY</h1>
@@ -16,9 +16,9 @@ import { site, stats } from '../data/site';
     </div>
   </section>
 
-  <section class="section section-surface">
-    <div class="container grid-3">
-      <article class="card">
+  <section class="section section-surface" data-gsap-reveal>
+    <div class="container grid-3" data-stagger>
+      <article class="card" data-reveal>
         <p class="label">VISION</p>
         <h3>LEADING THROUGH QUALITY</h3>
         <p>
@@ -26,7 +26,7 @@ import { site, stats } from '../data/site';
           and excellence that enhances communities across Victoria.
         </p>
       </article>
-      <article class="card">
+      <article class="card" data-reveal>
         <p class="label">MISSION</p>
         <h3>DELIVER LASTING VALUE</h3>
         <p>
@@ -34,7 +34,7 @@ import { site, stats } from '../data/site';
           quality, site safety, and client confidence from start to finish.
         </p>
       </article>
-      <article class="card">
+      <article class="card" data-reveal>
         <p class="label">CORE VALUES</p>
         <h3>QUALITY. TRANSPARENCY. SAFETY.</h3>
         <p>
@@ -45,13 +45,13 @@ import { site, stats } from '../data/site';
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" data-gsap-reveal>
     <div class="container">
       <p class="kicker">PERFORMANCE</p>
       <h2 class="section-title">PROJECT DELIVERY METRICS</h2>
-      <div class="grid-4">
+      <div class="grid-4" data-stagger>
         {stats.map((stat) => (
-          <article class="card">
+          <article class="card" data-reveal>
             <h3>{stat.value}</h3>
             <p>{stat.label}</p>
           </article>
@@ -60,7 +60,7 @@ import { site, stats } from '../data/site';
     </div>
   </section>
 
-  <section class="section section-surface">
+  <section class="section section-surface" data-gsap-reveal>
     <div class="container">
       <p class="kicker">SERVICE AREA</p>
       <h2 class="section-title">MELBOURNE WEST AND BEYOND</h2>

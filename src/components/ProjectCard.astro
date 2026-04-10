@@ -12,14 +12,16 @@ interface Props {
 const { title, href, summary, image, location } = Astro.props;
 ---
 
-<article class="project-card">
+<article class="project-card" data-gsap-card data-gsap-reveal>
   <a href={href} class="project-card-link" aria-label={`View project ${title}`}>
-    <Image src={image} alt={title} width={900} height={600} loading="lazy" />
+    <div class="project-image-wrap">
+      <Image src={image} alt={title} width={900} height={600} loading="lazy" />
+    </div>
     <div class="project-card-body">
       <p class="label">{location}</p>
       <h3>{title}</h3>
       <p>{summary}</p>
-      <span class="text-link">VIEW PROJECT</span>
+      <span class="text-link" data-link-line>VIEW PROJECT</span>
     </div>
   </a>
 </article>

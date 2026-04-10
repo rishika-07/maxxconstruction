@@ -2,9 +2,9 @@
 import { navLinks, site } from '../data/site';
 ---
 
-<header class="site-header">
+<header class="site-header" data-gsap-reveal>
   <div class="header-shell container">
-    <details class="menu-drawer">
+    <details class="menu-drawer" data-gsap-reveal>
       <summary aria-label="Open site navigation">
         <span class="menu-icon" aria-hidden="true"></span>
         <span>MENU</span>
@@ -22,10 +22,32 @@ import { navLinks, site } from '../data/site';
       MAXX CONSTRUCTION GROUP
     </a>
 
-    <div class="header-actions">
-      <details class="search-drawer">
+    <div class="header-actions" data-gsap-reveal>
+      <button class="theme-toggle-single" type="button" data-theme-toggle aria-label="Switch theme" title="Theme: system">
+        <svg class="icon-system" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="3" y="4" width="18" height="14" rx="2"></rect>
+          <line x1="9" y1="20" x2="15" y2="20"></line>
+          <line x1="12" y1="18" x2="12" y2="20"></line>
+        </svg>
+        <svg class="icon-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="4"></circle>
+          <line x1="12" y1="2" x2="12" y2="5"></line>
+          <line x1="12" y1="19" x2="12" y2="22"></line>
+          <line x1="2" y1="12" x2="5" y2="12"></line>
+          <line x1="19" y1="12" x2="22" y2="12"></line>
+          <line x1="4.9" y1="4.9" x2="7" y2="7"></line>
+          <line x1="17" y1="17" x2="19.1" y2="19.1"></line>
+          <line x1="17" y1="7" x2="19.1" y2="4.9"></line>
+          <line x1="4.9" y1="19.1" x2="7" y2="17"></line>
+        </svg>
+        <svg class="icon-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M14.7 3.3a8.5 8.5 0 1 0 6 14.5 8.5 8.5 0 0 1-6-14.5z"></path>
+        </svg>
+      </button>
+      <details class="search-drawer" data-drawer="search">
         <summary aria-label="Open quick search">SEARCH</summary>
         <div class="search-drawer-panel">
+          <button class="search-close" type="button" data-close-drawer="search" aria-label="Close search">CLOSE</button>
           <label class="sr-only" for="header-search-input">Search</label>
           <input id="header-search-input" type="search" placeholder="Search projects or services" />
           <button type="button">GO</button>
@@ -36,7 +58,7 @@ import { navLinks, site } from '../data/site';
     </div>
   </div>
 
-  <div class="header-contact-bar">
+  <div class="header-contact-bar" data-gsap-reveal>
     <p>
       CONTACT SUPPORT:
       <a href={site.tel}>{site.phone}</a>

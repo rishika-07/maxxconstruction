@@ -20,29 +20,31 @@ const { Content } = await render(project);
 ---
 
 <BaseLayout title={`${project.data.title} | Maxx Construction Group`} description={project.data.summary}>
-  <section class="section">
+  <section class="section" data-gsap-reveal>
     <div class="container">
       <p class="kicker">PROJECT DETAIL</p>
       <h1 class="section-title">{project.data.title}</h1>
       <p class="section-intro">{project.data.summary}</p>
-      <p class="label">{project.data.location} | COMPLETED {project.data.completionYear}</p>
+      <p class="label" data-reveal>{project.data.location} | COMPLETED {project.data.completionYear}</p>
     </div>
   </section>
 
-  <section class="section section-surface">
+  <section class="section section-surface" data-gsap-reveal>
     <div class="container">
-      <div class="grid-2">
+      <div class="grid-2" data-stagger>
         {project.data.gallery.map((image) => (
-          <Image src={image} width={1200} height={800} alt={project.data.title} loading="lazy" />
+          <div class="project-gallery-image" data-reveal>
+            <Image src={image} width={1200} height={800} alt={project.data.title} loading="lazy" />
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" data-gsap-reveal>
     <div class="container">
       <Content />
-      <div class="cta-row">
+      <div class="cta-row" data-stagger>
         <a class="btn-accent" href={`${import.meta.env.BASE_URL}contact`}>START YOUR PROJECT</a>
         <a class="btn-ghost" href={`${import.meta.env.BASE_URL}projects`}>BACK TO PROJECTS</a>
       </div>
